@@ -30,9 +30,4 @@ export default function (app: Express) {
         res.status(200).json(decoded)
     })
 
-
-    const port = 8080;
-    app.listen(port, () => {
-        console.log(`server started! Port: ${port}`)
-    });
 }
