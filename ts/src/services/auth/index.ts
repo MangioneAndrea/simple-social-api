@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import db from "../../db";
 
 // Just random key... we don't really care for security :D
 const examplePrivateKey = "-----BEGIN RSA PRIVATE KEY-----\n" +
@@ -12,6 +13,8 @@ const examplePrivateKey = "-----BEGIN RSA PRIVATE KEY-----\n" +
     "-----END RSA PRIVATE KEY-----"
 
 export const login = (email: string, password: string) => {
+    const user = db.getCollection("users").findOne({email});
+    if (!user) throw new Error("User not found");
     return jwt.sign({email}, examplePrivateKey, {algorithm: 'RS256'});
 }
 
