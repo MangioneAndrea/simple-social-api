@@ -1,5 +1,3 @@
-import Db from "./index";
-
 class Collection<T extends { [key: string]: any }> {
     #data: Array<T>
 
@@ -17,6 +15,22 @@ class Collection<T extends { [key: string]: any }> {
         return this.#data.find(el => {
             return Object.entries(props).every(([key, value]) => el[key] === value)
         });
+    }
+
+    insert(props: T) {
+        this.#data.push(props)
+    }
+
+    insertMany(...props: Array<T>) {
+        this.#data.push(...props)
+    }
+
+
+    deleteOne(props: Partial<T>) {
+        const index = this.#data.findIndex(el => {
+            return Object.entries(props).every(([key, value]) => el[key] === value)
+        });
+        this.#data.splice(index, 0)
     }
 }
 
