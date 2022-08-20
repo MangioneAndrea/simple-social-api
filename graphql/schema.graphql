@@ -1,3 +1,9 @@
+scalar Void
+
 type Query{
     login(email: String!, password: String!): String!
+}
+
+type Mutation{
+    register(email: String!, password: String!): Void
 }

@@ -20,3 +20,7 @@ export const login = (email: string, password: string) => {
 export const verify = (token: string) => {
     return jwt.verify(token, examplePrivateKey, {algorithms: ['RS256']});
 }
+
+export const register = (email: string, password: string) => {
+    db.getCollection("users").insert({email, password});
+}

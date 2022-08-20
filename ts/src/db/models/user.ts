@@ -7,5 +7,5 @@ const UserType = {
         type: "string"
     }
 }
-
+ 
 export default UserType

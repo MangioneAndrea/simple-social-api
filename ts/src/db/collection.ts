@@ -22,34 +22,35 @@ class Collection<K extends keyof typeof Collections> {
         });
     }
 
-    #assertUnique(...props: Array<CollectionsType[K]>): boolean {
+    #assertUnique(...props: Array<CollectionsType[K]>): void {
         // All unique keys
         const uniqueProps = Object.entries(Collections[this.#collectionKey])
             .filter(([_, {unique}]) => unique)
             .map(([key]) => key);
 
-        return !this.#data.some((data) => {
+        this.#data.some((data) => {
             return Object.entries(data)
                 // Of the unique props in the db
                 .filter(([key]) => uniqueProps.includes(key))
                 .some(([key, value]) => {
                     // At least one of the inputted elements
                     // contains one value which is already in the db
-                    return props.some((input) => input[key] === value)
+                    if (props.some((input) => input[key] === value)) {
+                        throw new Error(`Duplicate key "${key}" on collection "${this.#collectionKey}"`)
+                    }
                 })
         })
     }
 
     insert(props: CollectionsType[K]) {
-        if (this.#assertUnique(props)) {
-            this.#data.push(props)
-        }
+        this.#assertUnique(props)
+        this.#data.push(props)
     }
 
-    insertMany(...props: Array<CollectionsType[K]>) {
-        if (this.#assertUnique(...props)) {
-            this.#data.push(...props)
-        }
+    insertMany(...props: Array<CollectionsType[K]>): boolean {
+        this.#assertUnique(...props)
+        this.#data.push(...props)
+        return true;
     }
 
     deleteOne(props: Partial<CollectionsType[K]>) {
