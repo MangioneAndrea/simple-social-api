@@ -17,7 +17,6 @@ export const login = (email: string, password: string) => {
     if (!user) throw new Error("User not found");
     return jwt.sign({email}, examplePrivateKey, {algorithm: 'RS256'});
 }
-
 export const verify = (token: string) => {
     return jwt.verify(token, examplePrivateKey, {algorithms: ['RS256']});
 }

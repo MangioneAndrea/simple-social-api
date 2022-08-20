@@ -1,26 +1,19 @@
 import Collection from "./collection";
-import type User from "./models/user";
-
-type Collections = {
-    users: User
-}
+import {Collections, CollectionsType} from "./types";
 
 
 class DB {
     data: {
-        [K in keyof Collections]: Array<Collections[K]>
+        [K in keyof typeof Collections]: Array<CollectionsType[K]>
     }
-
 
     constructor() {
         this.data = {users: [{email: "andrea", password: "asd"}]};
     }
 
-    getCollection<K extends keyof Collections>(collection: K): Collection<Collections[K]> {
-        return new Collection(this.data[collection])
+    getCollection<K extends keyof CollectionsType>(collection: K): Collection<K> {
+        return new Collection(collection, this.data[collection])
     }
-
-
 }
 
 
