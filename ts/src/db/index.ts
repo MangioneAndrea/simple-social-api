@@ -1,18 +1,32 @@
+import fs from "fs"
+import util from "util"
 import Collection from "./collection";
 import {Collections, CollectionsType} from "./types";
+import {dirname} from "path";
+import {fileURLToPath} from "url";
 
+const DB_PATH = dirname(fileURLToPath(import.meta.url)) + "/../../../db/database.json"
+
+type Data = {
+    [K in keyof typeof Collections]: Array<CollectionsType[K]>
+}
 
 class DB {
-    data: {
-        [K in keyof typeof Collections]: Array<CollectionsType[K]>
-    }
+    #data: Data
 
     constructor() {
-        this.data = {users: [{email: "andrea", password: "asd"}]};
+        this.#data = JSON.parse(fs.readFileSync(DB_PATH) as unknown as string) as unknown as Data;
+        setInterval(()=>{
+            this.#sync()
+        }, 200)
+    }
+
+    #sync() {
+        fs.writeFileSync(DB_PATH, JSON.stringify(this.#data, null, 2));
     }
 
     getCollection<K extends keyof CollectionsType>(collection: K): Collection<K> {
-        return new Collection(collection, this.data[collection])
+        return new Collection(collection, this.#data[collection])
     }
 }
 

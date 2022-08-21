@@ -6,4 +6,6 @@ type Query{
 
 type Mutation{
     register(email: String!, password: String!): Void
+
+    createPost(title: String!, content: String!): Void
 }

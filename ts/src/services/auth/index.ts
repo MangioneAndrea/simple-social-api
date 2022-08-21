@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import crypto from "crypto"
 import db from "../../db";
 
 // Just random key... we don't really care for security :D
@@ -15,6 +16,7 @@ const examplePrivateKey = "-----BEGIN RSA PRIVATE KEY-----\n" +
 export const login = (email: string, password: string) => {
     const user = db.getCollection("users").findOne({email});
     if (!user) throw new Error("User not found");
+    if (!compare(user.password, password)) throw new Error("Wrong password");
     return jwt.sign({email}, examplePrivateKey, {algorithm: 'RS256'});
 }
 export const verify = (token: string) => {
@@ -22,5 +24,22 @@ export const verify = (token: string) => {
 }
 
 export const register = (email: string, password: string) => {
-    db.getCollection("users").insert({email, password});
+    const hashedPwd = hashPassword(password, randomsalt());
+    db.getCollection("users").insert({email, password: hashedPwd});
+}
+
+const randomsalt = () => crypto.randomBytes(16)
+    .toString('hex')
+    .slice(0, 16);
+
+
+const compare = (hash: string, password: string): boolean => {
+    const salt = hash.split(".")[0]
+    const res = hashPassword(password, salt);
+    return res === hash;
+}
+
+const hashPassword = (password: string, salt: string) => {
+    const value = crypto.createHmac('sha512', salt).update(password).digest('hex');
+    return `${salt}.${value}`
 }

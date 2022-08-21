@@ -1,9 +1,9 @@
 import * as Services from "../../services"
 
-export const login = ({email, password}: { email: string, password: string }) => {
+export const login = ({email, password}: { email: string, password: string }, context: any) => {
     return Services.Auth.login(email, password);
 }
 
-export const register = ({email, password}: { email: string, password: string }) => {
+export const register = ({email, password}: { email: string, password: string }, context: any) => {
     return Services.Auth.register(email, password);
 }

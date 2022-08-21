@@ -4,10 +4,10 @@ import {fileURLToPath} from 'url';
 import {dirname} from 'path';
 
 import {graphqlHTTP} from "express-graphql";
-import express from 'express'
+import express, {NextFunction, Request, Response} from 'express'
 
 import * as controllers from './controllers'
-
+import * as middlewares from "./middlewares";
 
 const port = 8080;
 const app = express();
@@ -16,12 +16,14 @@ const schema = await loadSchema(`${dirname(fileURLToPath(import.meta.url))}/../.
     loaders: [new GraphQLFileLoader()]
 });
 
+app.use(express.json())
 
-app.use("/graphql", graphqlHTTP({
+app.use("/graphql", (req: Request, res: Response) => graphqlHTTP({
     schema: schema,
     rootValue: controllers,
-    graphiql: true
-}))
+    graphiql: true,
+    context: middlewares.graphqlContext(req)
+})(req, res))
 
 
 app.listen(port, () => {

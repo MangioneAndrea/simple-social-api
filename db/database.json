@@ -1,0 +1,12 @@
+{
+  "users": [
+    {
+      "email": "andreaa",
+      "password": "0e92fa37d1d015c5.c0a0ad362638b9795ca54ae4737b5cd6cc97a69b04588c4ac45f7ec53d81d50ceeeae9381d61a02d039beb4934a6a27696b8780229a603eed96a0dbe894e0e89"
+    },
+    {
+      "email": "andrea",
+      "password": "5257a1e5d9e9a255.54ae7b3977bf19b14e31c79199fc32c09cbf392f70f972a5761a8886120b035775c7075e554fa496bf0a22b19c306ea83b0a7d3304a6044b8284f035c37f444f"
+    }
+  ]
+}
