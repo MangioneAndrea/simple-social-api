@@ -1,5 +1,4 @@
 import fs from "fs"
-import util from "util"
 import Collection from "./collection";
 import {Collections, CollectionsType} from "./types";
 import {dirname} from "path";

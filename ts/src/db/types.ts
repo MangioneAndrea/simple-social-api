@@ -1,5 +1,5 @@
 import User from "./models/user";
-import Collection from "./collection";
+import Post from "./models/post";
 
 export interface CollectionType {
     [key: string]: {
@@ -9,7 +9,8 @@ export interface CollectionType {
 }
 
 export const Collections: { [key: string]: CollectionType } = {
-    users: User
+    users: User,
+    posts: Post
 }
 
 export type CollectionsType = {
