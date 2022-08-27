@@ -1,5 +1,10 @@
 import {Collections, CollectionsType} from "./types";
 
+type Pagination = {
+    skip: number,
+    limit: number
+}
+
 class Collection<K extends keyof typeof Collections> {
 
     #data: Array<CollectionsType[K]>
@@ -10,10 +15,12 @@ class Collection<K extends keyof typeof Collections> {
         this.#collectionKey = collectionKey;
     }
 
-    find(props: Partial<CollectionsType[K]>): Array<CollectionsType[K]> {
-        return this.#data.filter(el => {
+    find(props: Partial<CollectionsType[K]>, pagination?: Pagination): Array<CollectionsType[K]> {
+        const subset = this.#data.filter(el => {
             return Object.entries(props).every(([key, value]) => el[key] === value)
         });
+        const toLimit = pagination.limit ? pagination.skip + pagination.limit : undefined
+        return subset.slice(pagination.skip || 0, toLimit)
     }
 
     findOne(props: Partial<CollectionsType[K]>): CollectionsType[K] | undefined {

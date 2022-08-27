@@ -7,3 +7,7 @@ export const create = (title: string, description: string) => {
     db.getCollection("post").insert(Post)
     return Post
 }
+
+export const get = (skip: number, limit: number) => {
+    return db.getCollection("post").find({}, {skip, limit})
+}

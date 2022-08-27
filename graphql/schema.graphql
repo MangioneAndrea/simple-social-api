@@ -1,11 +1,19 @@
 scalar Void
 
+type Post{
+    id: String!
+    title: String!
+    content: String!
+}
+
 type Query{
     login(email: String!, password: String!): String!
+
+    posts(page: Int!, amount: Int!): [Post]!
 }
 
 type Mutation{
     register(email: String!, password: String!): Void
 
-    createPost(title: String!, content: String!): Void
+    createPost(title: String!, content: String!): Post
 }
