@@ -10,5 +10,5 @@ export const posts = ({page, amount}: { page: number, amount: number }, ctx: any
     if (page < 1) throw new Error("Page must be a positive integer");
     if (amount < 1) throw new Error("Amount must be a positive integer");
     const skip = (page - 1) * amount
-    Services.Post.get(skip, amount)
+    return Services.Post.get(skip, amount)
 }
