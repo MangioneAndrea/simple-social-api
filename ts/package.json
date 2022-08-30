@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
+    "beautify": "eslint --fix --cache",
     "start": "nodemon -x node --no-warnings --loader ts-node/esm --experimental-specifier-resolution=node ./src/server.ts "
   },
   "type": "module",
