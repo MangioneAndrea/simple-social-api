@@ -15,7 +15,7 @@ class DB {
 
     constructor() {
         this.#data = JSON.parse(fs.readFileSync(DB_PATH) as unknown as string) as unknown as Data;
-        setInterval(()=>{
+        setInterval(() => {
             this.#sync()
         }, 200)
     }
@@ -24,7 +24,8 @@ class DB {
         fs.writeFileSync(DB_PATH, JSON.stringify(this.#data, null, 2));
     }
 
-    getCollection<K extends keyof CollectionsType>(collection: K): Collection<K> {
+    getCollection<K extends keyof typeof Collections>(collection: K): Collection<K> {
+        if (!this.#data[collection]) this.#data[collection] = [];
         return new Collection(collection, this.#data[collection])
     }
 }

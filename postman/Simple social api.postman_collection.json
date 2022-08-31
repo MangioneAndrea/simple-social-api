@@ -81,19 +81,11 @@
 							}
 						],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "firstname",
-									"value": "123",
-									"type": "text"
-								},
-								{
-									"key": "lastname",
-									"value": "asd",
-									"type": "text"
-								}
-							]
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation{\r\n    register(email: \"andrea@mangione.dev\", password:\"123\")\r\n}",
+								"variables": ""
+							}
 						},
 						"url": {
 							"raw": "localhost:8080/graphql",
@@ -136,9 +128,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"let response = pm.response.json();\r",
-									"\r",
-									"pm.collectionVariables.set(\"jwt\", response.data.login)"
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -166,7 +156,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query{\r\n    posts(page:1,amount:3 ){\r\n        id\r\n        title\r\n        content\r\n    }\r\n}",
+								"query": "query{\r\n    posts(page:2,amount:4 ){\r\n        id\r\n        title\r\n        content\r\n    }\r\n}",
 								"variables": ""
 							}
 						},
@@ -206,9 +196,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"let response = pm.response.json();\r",
-									"\r",
-									"pm.collectionVariables.set(\"jwt\", response.data.login)"
+									""
 								],
 								"type": "text/javascript"
 							}

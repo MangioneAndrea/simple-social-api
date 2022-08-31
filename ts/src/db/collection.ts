@@ -11,7 +11,7 @@ class Collection<K extends keyof typeof Collections> {
     readonly #collectionKey: K;
 
     constructor(collectionKey: K, data: Array<CollectionsType[K]>) {
-        this.#data = data || []
+        this.#data = data
         this.#collectionKey = collectionKey;
     }
 
@@ -30,6 +30,7 @@ class Collection<K extends keyof typeof Collections> {
     }
 
     #assertUnique(...props: Array<CollectionsType[K]>): void {
+        console.log(this.#collectionKey)
         // All unique keys
         const uniqueProps = Object.entries(Collections[this.#collectionKey])
             .filter(([_, {unique}]) => unique)
@@ -51,6 +52,7 @@ class Collection<K extends keyof typeof Collections> {
 
     insert(props: CollectionsType[K]) {
         this.#assertUnique(props)
+        console.log(this.#data)
         this.#data.push(props)
     }
 

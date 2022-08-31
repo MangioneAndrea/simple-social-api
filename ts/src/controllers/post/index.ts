@@ -1,8 +1,8 @@
 import * as Services from "../../services"
 
-export const createPost = ({name, content}: { name: string, content: string }, ctx: any) => {
+export const createPost = ({title, content}: { title: string, content: string }, ctx: any) => {
     ctx.assertLoggedIn()
-    return Services.Post.create(name, content)
+    return Services.Post.create(title, content)
 }
 
 export const posts = ({page, amount}: { page: number, amount: number }, ctx: any) => {
