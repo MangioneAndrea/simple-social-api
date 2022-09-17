@@ -1,6 +1,6 @@
 import * as Services from "../../services"
 
-export const login = ({email, password}: { email: string, password: string }, context: any) => {
+export const jwt = ({email, password}: { email: string, password: string }, context: any) => {
     return Services.Auth.login(email, password);
 }
 

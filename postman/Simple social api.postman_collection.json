@@ -45,7 +45,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query{\r\n    login(email: \"andrea@mangione.dev\", password:\"123\")\r\n}",
+								"query": "query{\r\n    jwt(email: \"andrea@mangione.dev\", password:\"123\")\r\n}",
 								"variables": ""
 							}
 						},

@@ -7,13 +7,13 @@ type Post{
 }
 
 type Query{
-    login(email: String!, password: String!): String!
+    jwt(email: String!, password: String!): String!
 
     posts(page: Int!, amount: Int!): [Post]!
 }
 
 type Mutation{
-    register(email: String!, password: String!): Void
+    register(email: String!, password: String!): String
 
     createPost(title: String!, content: String!): Post
 }
