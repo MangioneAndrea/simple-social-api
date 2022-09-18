@@ -1,0 +1,20 @@
+# docker compose --profile go/ts up -d
+version: '3.9'
+
+services:
+  db:
+    image: db
+    container_name: db
+    restart: always
+  ts: 
+    image: ts
+    container_name: ts
+    restart: always
+    profiles:
+      - ts
+  go:
+    image: go
+    container_name: go
+    restart: always
+    profiles:
+      - go
