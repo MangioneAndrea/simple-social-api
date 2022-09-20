@@ -1,10 +1,13 @@
-FROM node::latest
+FROM node:18.9-alpine3.15
 
-RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
+WORKDIR /app
+
+RUN npm i -g pnpm
 
 COPY src ./src
 COPY package.json ./
 COPY tsconfig.json ./
+COPY .npmrc ./
 
 RUN pnpm i
 
