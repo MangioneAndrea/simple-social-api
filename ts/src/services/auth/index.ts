@@ -1,6 +1,5 @@
 import crypto from "crypto"
 import jwt from 'jsonwebtoken'
-import db from "../../db";
 
 // Just random key... we don't really care for security :D
 const examplePrivateKey = "-----BEGIN RSA PRIVATE KEY-----\n" +

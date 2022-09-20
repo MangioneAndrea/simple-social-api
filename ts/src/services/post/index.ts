@@ -1,5 +1,4 @@
 import * as Util from "../../util";
-import db from "../../db";
 
 export const create = (title: string, content: string) => {
     const id = Util.randomId()

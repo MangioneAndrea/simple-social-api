@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package Posts;
+option go_package = "./protocolbuffers";
+
+
+message Post{
+  string id = 1;
+  string title = 2;
+  string content = 3;
+}
+
+
+message Pagination{
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+message Posts{
+  repeated Post posts = 1;
+}
+
+
+service PostsService{
+  rpc CreatePost(Post) returns (Post){};
+  rpc GetPosts(Pagination) returns (Posts){};
+}
