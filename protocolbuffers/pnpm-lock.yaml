@@ -1,0 +1,20 @@
+lockfileVersion: 5.4
+
+specifiers:
+  ts-protoc-gen: ^0.15.0
+
+devDependencies:
+  ts-protoc-gen: 0.15.0
+
+packages:
+
+  /google-protobuf/3.21.0:
+    resolution: {integrity: sha512-byR7MBTK4tZ5PZEb+u5ZTzpt4SfrTxv5682MjPlHN16XeqgZE2/8HOIWeiXe8JKnT9OVbtBGhbq8mtvkK8cd5g==}
+    dev: true
+
+  /ts-protoc-gen/0.15.0:
+    resolution: {integrity: sha512-TycnzEyrdVDlATJ3bWFTtra3SCiEP0W0vySXReAuEygXCUr1j2uaVyL0DhzjwuUdQoW5oXPwk6oZWeA0955V+g==}
+    hasBin: true
+    dependencies:
+      google-protobuf: 3.21.0
+    dev: true

@@ -1,12 +1,10 @@
+import { createPost, getPosts } from "../../protocolbuffers/posts";
 import * as Util from "../../util";
 
 export const create = (title: string, content: string) => {
-    const id = Util.randomId()
-    const Post = {id, title, content}
-    db.getCollection("posts").insert(Post)
-    return Post
-}
+  return createPost(title, content);
+};
 
 export const get = (skip: number, limit: number) => {
-    return db.getCollection("posts").find({}, {skip, limit})
-}
+  return getPosts(skip, limit);
+};

@@ -1,0 +1,13 @@
+{
+  "name": "protocolbuffers",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "go run Compile.go"
+  },
+  "keywords": [],
+  "author": "andrea@mangione.dev",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-protoc-gen": "^0.15.0"
+  }
+}

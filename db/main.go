@@ -10,8 +10,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-const url = ":1274"
-
 func main() {
 	s := grpc.NewServer()
 

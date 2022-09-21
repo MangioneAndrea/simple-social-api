@@ -17,6 +17,6 @@ message AuthUser{
 
 
 service AuthService{
-  rpc CreateUser(User) returns (User){};
+  rpc CreateUser(AuthUser) returns (User){};
   rpc GetAuthUser(User) returns (AuthUser){};
 }
