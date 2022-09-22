@@ -134,5 +134,4 @@ data
 
 go/protocolbuffers
 db/protocolbuffers
-*pb.d.ts
-*pb.js
+ts/src/protocolbuffers
