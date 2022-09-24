@@ -1,6 +1,34 @@
 import crypto from "crypto";
-import jwt from "jsonwebtoken";
-import { getAuthUser, createUser } from "../../protocolbuffers/auth";
+import jwt from "jsonwebtoken";import grpc from "@grpc/grpc-js";
+import { AuthServiceClientImpl } from "../../protocolbuffers/auth";
+
+const grpcServerUrl = "0.0.0.0:50051";
+
+const Client = grpc.makeGenericClientConstructor({}, "AuthService", {});
+const client = new Client(grpcServerUrl, grpc.credentials.createInsecure());
+
+function request(
+  service: string,
+  method: string,
+  data: Uint8Array
+): Promise<Uint8Array> {
+  return new Promise<Uint8Array>((resolve, reject) => {
+    client.makeUnaryRequest(
+      service + "/" + method,
+      (message: Uint8Array) => message.buffer as Buffer,
+      (message: Uint8Array) => message,
+      data,
+      (err: Error | null, response: unknown) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(response as Uint8Array);
+        }
+      }
+    );
+  });
+}
+export const AuthService = new AuthServiceClientImpl({ request });
 
 // Just random key... we don't really care for security :D
 const examplePrivateKey =
@@ -15,7 +43,7 @@ const examplePrivateKey =
   "-----END RSA PRIVATE KEY-----";
 
 export const login = async (email: string, password: string) => {
-  const user = await getAuthUser(email);
+  const user = await AuthService.GetAuthUser( {email});
   //db.getCollection("users").findOne({email});
   if (!user) throw new Error("User not found");
   if (!compare(user.getPassword(), password)) throw new Error("Wrong password");

@@ -1,5 +1,4 @@
 import grpc from "@grpc/grpc-js";
-import { Message, Method, rpc, RPCImpl, RPCImplCallback } from "protobufjs/minimal";
 import {
   Pagination,
   Post,
@@ -8,30 +7,31 @@ import {
 
 const grpcServerUrl = "0.0.0.0:50051";
 
-const Client =  grpc.makeGenericClientConstructor({}, "PostsService", {});
+const Client = grpc.makeGenericClientConstructor({}, "PostsService", {});
 const client = new Client(grpcServerUrl, grpc.credentials.createInsecure());
 
-const rpcImpl: RPCImpl = (
-  method: Method, // | rpc.ServiceMethod<Message<{}>, Message<{}>>,
-  requestData: Uint8Array,
-  callback: RPCImplCallback
-) => {
-  client.makeUnaryRequest(
-    method.service.name + "/" + method.name,
-    (message: Message<{}>) => message.toArrayBuffer(),
-    (message: Uint8Array) => Post.decode(message),
-    requestData,
-    (err: Error | undefined, response: Uint8Array) => {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, response);
+function request(
+  service: string,
+  method: string,
+  data: Uint8Array
+): Promise<Uint8Array> {
+  return new Promise<Uint8Array>((resolve, reject) => {
+    client.makeUnaryRequest(
+      service + "/" + method,
+      (message: Uint8Array) => message.buffer as Buffer,
+      (message: Uint8Array) => message,
+      data,
+      (err: Error | null, response: unknown) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(response as Uint8Array);
+        }
       }
-    }
-  );
-};
-
-export const PostService = new PostsServiceClientImpl(rpcImpl);
+    );
+  });
+}
+export const PostService = new PostsServiceClientImpl({ request });
 
 export const create = (title: string, content: string) => {
   return PostService.CreatePost(Post.fromJSON({ title, content }));
