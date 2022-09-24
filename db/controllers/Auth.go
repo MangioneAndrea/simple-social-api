@@ -15,6 +15,6 @@ func (*Auth) CreateUser(context.Context, *protocolbuffers.AuthUser) (*protocolbu
 }
 
 // GetAuthUser implements protocolbuffers.AuthServiceServer
-func (*Auth) GetAuthUser(context.Context, *protocolbuffers.User) (*protocolbuffers.AuthUser, error) {
-	panic("unimplemented")
+func (*Auth) GetAuthUser(c context.Context, u *protocolbuffers.User) (*protocolbuffers.AuthUser, error) {
+	return &protocolbuffers.AuthUser{Email: u.Email, Password: "asd"}, nil
 }

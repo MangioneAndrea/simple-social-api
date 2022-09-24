@@ -1,34 +1,12 @@
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
-import grpc from "@grpc/grpc-js";
-import { AuthServiceClientImpl, AuthUser, User, protobufPackage } from "../../protocolbuffers/auth";
+import {
+  AuthServiceClientImpl,
+  AuthUser,
+  User,
+} from "../../protocolbuffers/auth";
+import { request } from "../../protocolbuffers";
 
-const grpcServerUrl = "0.0.0.0:50051";
-
-const Client = grpc.makeGenericClientConstructor({}, protobufPackage, {});
-const client = new Client(grpcServerUrl, grpc.credentials.createInsecure());
-
-function request(
-  service: string,
-  method: string,
-  data: Uint8Array
-): Promise<Uint8Array> {
-  return new Promise<Uint8Array>((resolve, reject) => {
-    client.makeUnaryRequest(
-      service + "/" + method,
-      (message: Uint8Array) => message.buffer as Buffer,
-      (message: Uint8Array) => message,
-      data,
-      (err: Error | null, response: unknown) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(response as Uint8Array);
-        }
-      }
-    );
-  });
-}
 export const AuthService = new AuthServiceClientImpl({ request });
 
 // Just random key... we don't really care for security :D
@@ -44,18 +22,11 @@ const examplePrivateKey =
   "-----END RSA PRIVATE KEY-----";
 
 export const login = async (email: string, password: string) => {
-  try {
-    const u = User.fromJSON({ email })
-    const user = await AuthService.GetAuthUser(u);
-    //db.getCollection("users").findOne({email});
-    if (!user) throw new Error("User not found");
-    if (!compare(user.password, password)) throw new Error("Wrong password");
-    return jwt.sign({ email }, examplePrivateKey, { algorithm: "RS256" });
-
-  } catch (e) {
-    console.log(e)
-    throw e;
-  }
+  const u = User.fromJSON({ email });
+  const user = await AuthService.GetAuthUser(u);
+  if (!user) throw new Error("User not found");
+  if (!compare(user.password, password)) throw new Error("Wrong password");
+  return jwt.sign({ email }, examplePrivateKey, { algorithm: "RS256" });
 };
 export const verify = (token: string) => {
   return jwt.verify(token, examplePrivateKey, { algorithms: ["RS256"] });
