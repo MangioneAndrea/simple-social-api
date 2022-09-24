@@ -10,7 +10,7 @@ type Auth struct {
 }
 
 // CreateUser implements protocolbuffers.AuthServiceServer
-func (*Auth) CreateUser(context.Context, *protocolbuffers.User) (*protocolbuffers.User, error) {
+func (*Auth) CreateUser(context.Context, *protocolbuffers.AuthUser) (*protocolbuffers.User, error) {
 	panic("unimplemented")
 }
 

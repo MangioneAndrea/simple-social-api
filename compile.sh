@@ -7,8 +7,10 @@ fi
 allProtoFolders=($(ls -d protocolbuffers/*))
 for i in "${allProtoFolders[@]}"
 do
-   docker run --rm -v $(pwd):/defs namely/protoc-all -d $i -l go -o go/$i;
-   docker run --rm -v $(pwd):/defs namely/protoc-all -d $i -l go -o db/$i;
+    echo $i
+    echo docker run --rm -v $(pwd):/defs namely/protoc-all -d $i -l go -o go
+   docker run --rm -v $(pwd):/defs namely/protoc-all -d $i -l go -o go;
+   docker run --rm -v $(pwd):/defs namely/protoc-all -d $i -l go -o db;
    docker run --rm -v $(pwd):/defs namely/protoc-all -d $i -l typescript -o ts/src/protocolbuffers;
 done
 # Compile the protocol buffers.

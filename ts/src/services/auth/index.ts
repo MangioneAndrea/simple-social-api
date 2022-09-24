@@ -1,10 +1,11 @@
 import crypto from "crypto";
-import jwt from "jsonwebtoken";import grpc from "@grpc/grpc-js";
-import { AuthServiceClientImpl } from "../../protocolbuffers/auth";
+import jwt from "jsonwebtoken";
+import grpc from "@grpc/grpc-js";
+import { AuthServiceClientImpl, AuthUser, User, protobufPackage } from "../../protocolbuffers/auth";
 
 const grpcServerUrl = "0.0.0.0:50051";
 
-const Client = grpc.makeGenericClientConstructor({}, "AuthService", {});
+const Client = grpc.makeGenericClientConstructor({}, protobufPackage, {});
 const client = new Client(grpcServerUrl, grpc.credentials.createInsecure());
 
 function request(
@@ -43,11 +44,18 @@ const examplePrivateKey =
   "-----END RSA PRIVATE KEY-----";
 
 export const login = async (email: string, password: string) => {
-  const user = await AuthService.GetAuthUser( {email});
-  //db.getCollection("users").findOne({email});
-  if (!user) throw new Error("User not found");
-  if (!compare(user.getPassword(), password)) throw new Error("Wrong password");
-  return jwt.sign({ email }, examplePrivateKey, { algorithm: "RS256" });
+  try {
+    const u = User.fromJSON({ email })
+    const user = await AuthService.GetAuthUser(u);
+    //db.getCollection("users").findOne({email});
+    if (!user) throw new Error("User not found");
+    if (!compare(user.password, password)) throw new Error("Wrong password");
+    return jwt.sign({ email }, examplePrivateKey, { algorithm: "RS256" });
+
+  } catch (e) {
+    console.log(e)
+    throw e;
+  }
 };
 export const verify = (token: string) => {
   return jwt.verify(token, examplePrivateKey, { algorithms: ["RS256"] });
@@ -55,7 +63,7 @@ export const verify = (token: string) => {
 
 export const register = (email: string, password: string) => {
   const hashedPwd = hashPassword(password, randomsalt());
-  return createUser(email, hashedPwd);
+  return AuthService.CreateUser(AuthUser.fromJSON({ email, hashedPwd }));
 };
 
 const randomsalt = () => crypto.randomBytes(16).toString("hex").slice(0, 16);
