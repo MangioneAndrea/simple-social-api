@@ -127,3 +127,11 @@ dist
 .pnp.*
 
 .idea
+
+.pnpm-store
+
+data
+
+go/protocolbuffers
+db/protocolbuffers
+ts/src/protocolbuffers

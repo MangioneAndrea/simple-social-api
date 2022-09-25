@@ -1,0 +1,43 @@
+# docker compose --profile go/ts up -d
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo:6.0.1
+    container_name: ssa-mongo
+    ports:
+      - 27018:27017
+    volumes:
+      - ./data:/db/mongo/data/
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    restart: always
+  db:
+    build: 
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: ssa-db
+    restart: always
+  ts: 
+    build: 
+      context: ./ts
+      dockerfile: Dockerfile
+    container_name: ssa-ts
+    restart: always
+    volumes:
+      - ./ts:/app
+    profiles:
+      - ts
+    depends_on:
+      - db
+  go:
+    build: 
+      context: ./go
+      dockerfile: Dockerfile
+    container_name: ssa-go
+    restart: always
+    profiles:
+      - go
+    depends_on:
+      - db

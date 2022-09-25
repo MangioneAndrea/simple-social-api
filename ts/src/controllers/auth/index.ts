@@ -1,9 +1,10 @@
-import * as Services from "../../services"
+import * as Services from "../../services";
 
-export const jwt = ({email, password}: { email: string, password: string }, context: any) => {
-    return Services.Auth.login(email, password);
-}
+export const jwt = ({ email, password }: { email: string; password: string }) => {
+  return Services.Auth.login(email, password);
+};
 
-export const register = ({email, password}: { email: string, password: string }, context: any) => {
-    return Services.Auth.register(email, password);
-}
+export const register = async ( { email, password }: { email: string; password: string }) => {
+  const sad = await Services.Auth.register(email, password);
+  return sad;
+};

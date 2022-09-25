@@ -1,4 +1,4 @@
-module github.com/MangioneAndrea/simple-social-api
+module github.com/MangioneAndrea/simple-social-api/go
 
 go 1.18
 
