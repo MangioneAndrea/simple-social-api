@@ -8,6 +8,7 @@ const assertLoggedIn = (req: Request): JwtPayload => {
         const jwt = authorization.substring(7)
         return  services.Auth.verify(jwt) as JwtPayload
     } catch (e) {
+        console.error(e)
         throw new Error("Not authorized")
     }
 }

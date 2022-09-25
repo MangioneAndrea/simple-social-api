@@ -50,6 +50,14 @@ func InsertOne(ctx context.Context, from string, el any) (primitive.ObjectID, er
 	return result.InsertedID.(primitive.ObjectID), nil
 }
 
+func InsertOneAndFind[T any](ctx context.Context, from string, el any) (*T, error) {
+	id, err := InsertOne(ctx, from, el)
+	if err != nil {
+		return nil, err
+	}
+	return FindOne[T](ctx, from, bson.M{"_id": id})
+}
+
 func InsertMany(ctx context.Context, from string, el []any) ([]primitive.ObjectID, error) {
 	response, err := ctx.Value("db").(*mongo.Database).Collection(from).InsertMany(ctx, el)
 	if err != nil {

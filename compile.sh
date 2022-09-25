@@ -16,4 +16,8 @@ done
 for i in ts/src/protocolbuffers/*; do
     sed -i -- 's/* as _m0/{ default as _m0 }/g' $i
 done
+
+for i in */protocolbuffers/*.pb.go; do
+    sed -i -- 's/json:"id,omitempty"`/json:"id,omitempty" bson:"_id,omitempty"`/g' $i
+done
 # Compile the protocol buffers.

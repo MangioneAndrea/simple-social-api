@@ -13,6 +13,14 @@ type aggregation[T any] struct {
 	from   string
 }
 
+func mapToBsonD[T any](m map[string]T) bson.M {
+	res := bson.M{}
+	for k, v := range m {
+		res[k] = v
+	}
+	return res
+}
+
 func Aggregate[T any](from string) *aggregation[T] {
 	return &aggregation[T]{
 		stages: []bson.D{},
@@ -67,12 +75,24 @@ func (a *aggregation[T]) Concat(fields ...string) *aggregation[T] {
 	return a
 }
 
-func (a *aggregation[T]) Skip(amount int) *aggregation[T] {
+type sorting int32
+
+const Ascending sorting = 1
+const Descending sorting = -1
+
+type SortingMap map[string]sorting
+
+func (a *aggregation[T]) Sort(s SortingMap) *aggregation[T] {
+	a.stages = append(a.stages, bson.D{{"$sort", mapToBsonD(s)}})
+	return a
+}
+
+func (a *aggregation[T]) Skip(amount int32) *aggregation[T] {
 	a.stages = append(a.stages, bson.D{{"$skip", amount}})
 	return a
 }
 
-func (a *aggregation[T]) Limit(amount int) *aggregation[T] {
+func (a *aggregation[T]) Limit(amount int32) *aggregation[T] {
 	a.stages = append(a.stages, bson.D{{"$limit", amount}})
 	return a
 }

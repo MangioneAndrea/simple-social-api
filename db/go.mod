@@ -2,11 +2,14 @@ module github.com/MangioneAndrea/simple-social-api/db
 
 go 1.18
 
-require go.mongodb.org/mongo-driver v1.10.2
+require (
+	github.com/MangioneAndrea/gonsole v0.1.2
+	go.mongodb.org/mongo-driver v1.10.2
+	google.golang.org/protobuf v1.27.1
+)
 
 require (
 	github.com/MangioneAndrea/GoUtils v1.0.4 // indirect
-	github.com/MangioneAndrea/gonsole v0.1.2 // indirect
 	github.com/gdamore/encoding v1.0.0 // indirect
 	github.com/gdamore/tcell v1.4.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
@@ -16,7 +19,6 @@ require (
 	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
 	golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1 // indirect
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
-	google.golang.org/protobuf v1.27.1 // indirect
 )
 
 require (

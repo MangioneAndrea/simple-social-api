@@ -5,14 +5,14 @@ option go_package = "./protocolbuffers";
 
 
 message Post{
-  string id = 1;
+  string id = 1 ;
   string title = 2;
   string content = 3;
 }
 
 
 message Pagination{
-  int32 page = 1;
+  int32 skip = 1;
   int32 limit = 2;
 }
 
