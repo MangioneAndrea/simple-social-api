@@ -2,19 +2,21 @@ package mongo
 
 import (
 	"context"
+	"time"
+
 	"github.com/MangioneAndrea/gonsole"
+	"github.com/MangioneAndrea/simple-social-api/db/mongo/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"time"
 )
 
 var Instance = Mongo{
 	KnownDBs: map[string]bool{},
 }
 
-func Connect(uri string) *Mongo {
-	client, err := mongo.NewClient(options.Client().ApplyURI(uri))
+func Connect(uri string, user string, password string) *Mongo {
+	client, err := mongo.NewClient(options.Client().ApplyURI(uri), options.Client().SetAuth(options.Credential{Username: user, Password: password}))
 	if err != nil {
 		gonsole.Error(err, "Creating mongo client", gonsole.ShowIfNotNil)
 		panic(err)
@@ -41,4 +43,27 @@ func Connect(uri string) *Mongo {
 	}
 
 	return &Instance
+}
+
+func RebuildIndexes(db *mongo.Database) (err error) {
+	var indices map[string][]mongo.IndexModel = map[string][]mongo.IndexModel{
+		models.UsersModel: models.UsersIndex,
+		models.PostsModel: models.PostsIndex,
+	}
+
+	for collection, index := range indices {
+		_ = db.CreateCollection(context.TODO(), collection)
+		_, err = db.Collection(collection).Indexes().DropAll(context.TODO())
+		if err != nil {
+			return err
+		}
+		if len(index) == 0 {
+			continue
+		}
+		_, err = db.Collection(collection).Indexes().CreateMany(context.TODO(), index)
+		if err != nil {
+			return err
+		}
+	}
+	return err
 }

@@ -6,12 +6,24 @@ import (
 	"net"
 
 	"github.com/MangioneAndrea/simple-social-api/db/controllers"
+	"github.com/MangioneAndrea/simple-social-api/db/middlewares"
+	"github.com/MangioneAndrea/simple-social-api/db/mongo"
 	"github.com/MangioneAndrea/simple-social-api/db/protocolbuffers"
 	"google.golang.org/grpc"
 )
 
 func main() {
-	s := grpc.NewServer()
+	m := mongo.Connect("mongodb://localhost:27018", "root", "root")
+	err := mongo.RebuildIndexes(m.Client.Database(middlewares.Dbname))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	s := grpc.NewServer(
+		middlewares.InterceptorBuilder(
+			middlewares.Mongo,
+		),
+	)
 
 	protocolbuffers.RegisterAuthServiceServer(s, &controllers.Auth{})
 	protocolbuffers.RegisterPostsServiceServer(s, &controllers.Posts{})
